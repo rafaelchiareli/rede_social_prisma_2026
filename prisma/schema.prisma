@@ -1,5 +1,5 @@
 // Turmagram: a rede social da turma
-// Aula 2: curtidas e comentários
+// Aula 3: hashtags (N para N) e perfil (1 para 1)
 
 generator client {
   provider = "prisma-client-js"
@@ -16,9 +16,19 @@ model Usuario {
   avatar   String
   criadoEm DateTime @default(now())
 
+  perfil      Perfil?
   posts       Post[]
   curtidas    Curtida[]
   comentarios Comentario[]
+}
+
+// Cada usuário tem no máximo UM perfil (relação 1 para 1)
+model Perfil {
+  id  Int    @id @default(autoincrement())
+  bio String
+
+  usuarioId Int     @unique
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 }
 
 model Post {
@@ -32,6 +42,15 @@ model Post {
 
   curtidas    Curtida[]
   comentarios Comentario[]
+  tags        Tag[]
+}
+
+// Um post tem várias tags e uma tag está em vários posts (N para N)
+model Tag {
+  id   Int    @id @default(autoincrement())
+  nome String @unique
+
+  posts Post[]
 }
 
 // Liga um usuário a um post que ele curtiu

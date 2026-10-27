@@ -1,16 +1,21 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { usuarioAtual } from "@/lib/usuarioAtual";
 import Avatar from "@/components/Avatar";
 import GradePosts from "@/components/GradePosts";
+import EditarBio from "@/components/EditarBio";
 
 export default async function PaginaUsuario({ params }) {
   const { id } = await params;
   const idNumero = Number(id);
   if (!Number.isInteger(idNumero)) notFound();
 
+  const eu = await usuarioAtual();
+
   const usuario = await prisma.usuario.findUnique({
     where: { id: idNumero },
     include: {
+      perfil: true, // relação 1 para 1: vem um objeto (ou null)
       posts: {
         orderBy: { criadoEm: "desc" },
         // Cada post já vem com os seus contadores
@@ -26,6 +31,8 @@ export default async function PaginaUsuario({ params }) {
     where: { post: { autorId: usuario.id } },
   });
 
+  const souEu = eu?.id === usuario.id;
+
   return (
     <main>
       <section className="perfil">
@@ -40,8 +47,11 @@ export default async function PaginaUsuario({ params }) {
               <strong>{curtidasRecebidas}</strong> curtidas recebidas
             </span>
           </p>
+          {usuario.perfil && <p className="bio">{usuario.perfil.bio}</p>}
         </div>
       </section>
+
+      {souEu && <EditarBio bio={usuario.perfil?.bio ?? ""} />}
 
       <GradePosts posts={usuario.posts} />
     </main>

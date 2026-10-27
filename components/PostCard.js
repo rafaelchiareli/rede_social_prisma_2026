@@ -2,6 +2,7 @@ import Link from "next/link";
 import Avatar from "./Avatar";
 import BotaoCurtir from "./BotaoCurtir";
 import BotaoApagar from "./BotaoApagar";
+import Legenda from "./Legenda";
 
 export default function PostCard({ post, eu }) {
   // A consulta trouxe só a minha curtida: se a lista não está vazia, eu curti
@@ -31,7 +32,7 @@ export default function PostCard({ post, eu }) {
       </div>
 
       <p className="legenda">
-        <strong>{post.autor.nome}</strong> {post.legenda}
+        <strong>{post.autor.nome}</strong> <Legenda texto={post.legenda} />
       </p>
     </article>
   );

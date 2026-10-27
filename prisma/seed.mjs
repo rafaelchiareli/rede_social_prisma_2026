@@ -1,4 +1,4 @@
-// Popula o banco com usuários, posts, curtidas e comentários de exemplo.
+// Popula o banco com usuários, perfis, posts com hashtags, curtidas e comentários.
 // Rode com: npx prisma db seed
 
 import { PrismaClient } from "@prisma/client";
@@ -8,30 +8,53 @@ const prisma = new PrismaClient();
 const avatar = (nome) => `https://api.dicebear.com/9.x/thumbs/svg?seed=${nome}`;
 const foto = (n) => `https://picsum.photos/seed/turmagram${n}/600/600`;
 
-// Cria um usuário já com os posts dele (create aninhado)
-function criarUsuario(nome, posts = []) {
+// Acha as #hashtags da legenda (igual ao lib/hashtags.js)
+function hashtags(texto) {
+  const nomes = (texto.match(/#[\p{L}\p{N}_]+/gu) ?? []).map((h) => h.slice(1).toLowerCase());
+  return [...new Set(nomes)];
+}
+
+// Monta um post já ligado às suas hashtags (connectOrCreate)
+function post(legenda, n) {
+  return {
+    legenda,
+    imagem: foto(n),
+    tags: {
+      connectOrCreate: hashtags(legenda).map((nome) => ({ where: { nome }, create: { nome } })),
+    },
+  };
+}
+
+// Cria um usuário já com o perfil e os posts dele (create aninhado)
+function criarUsuario(nome, bio, posts = []) {
   return prisma.usuario.create({
-    data: { nome, avatar: avatar(nome), posts: { create: posts } },
+    data: {
+      nome,
+      avatar: avatar(nome),
+      perfil: { create: { bio } },
+      posts: { create: posts },
+    },
     include: { posts: true },
   });
 }
 
 async function main() {
-  // Apagar os usuários apaga junto os posts, curtidas e comentários (cascata)
+  // Apagar os usuários apaga junto perfis, posts, curtidas e comentários (cascata)
   await prisma.usuario.deleteMany();
+  await prisma.tag.deleteMany();
 
-  const ana = await criarUsuario("ana", [
-    { legenda: "Primeiro post no Turmagram!", imagem: foto(1) },
-    { legenda: "Fim de semana na praia", imagem: foto(2) },
+  const ana = await criarUsuario("ana", "Fotografia e praia 📷", [
+    post("Primeiro post no Turmagram! #turma", 1),
+    post("Fim de semana na praia #praia #ferias", 2),
   ]);
-  const bruno = await criarUsuario("bruno", [
-    { legenda: "Treino de hoje concluído", imagem: foto(3) },
-    { legenda: "Alguém joga hoje à noite?", imagem: foto(4) },
+  const bruno = await criarUsuario("bruno", "Futebol todo dia ⚽", [
+    post("Treino de hoje concluído #futebol", 3),
+    post("Alguém joga hoje à noite? #games #turma", 4),
   ]);
-  const carla = await criarUsuario("carla", [
-    { legenda: "Meu desenho novo", imagem: foto(5) },
+  const carla = await criarUsuario("carla", "Desenho e música", [
+    post("Meu desenho novo #arte", 5),
   ]);
-  const davi = await criarUsuario("davi");
+  const davi = await criarUsuario("davi", "Novo por aqui!");
 
   // Curtidas: quem curtiu qual post
   await prisma.curtida.createMany({
@@ -55,7 +78,7 @@ async function main() {
     ],
   });
 
-  console.log("Banco populado com usuários, posts, curtidas e comentários!");
+  console.log("Banco populado com usuários, perfis, posts, hashtags, curtidas e comentários!");
 }
 
 main()
