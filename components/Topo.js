@@ -17,6 +17,7 @@ export default async function Topo() {
       <nav className="menu">
         <Link href="/">Feed</Link>
         <Link href="/explorar">Explorar</Link>
+        <Link href="/ranking">Ranking</Link>
         <Link href="/entrar">Usuários</Link>
       </nav>
 

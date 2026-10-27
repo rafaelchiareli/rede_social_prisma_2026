@@ -137,3 +137,26 @@ export async function salvarBio(formData) {
 
   revalidatePath("/", "layout");
 }
+
+// ---------- SEGUIDORES ----------
+
+// Segue um usuário. Se já seguia, deixa de seguir.
+export async function seguir(formData) {
+  const eu = await usuarioAtual();
+  if (!eu) redirect("/entrar");
+
+  const outroId = Number(formData.get("usuarioId"));
+  if (outroId === eu.id) return; // ninguém segue a si mesmo
+
+  const jaSigo = formData.get("jaSigo") === "true";
+
+  await prisma.usuario.update({
+    where: { id: eu.id },
+    data: {
+      // connect cria a ligação; disconnect desfaz (os usuários continuam existindo)
+      seguindo: jaSigo ? { disconnect: { id: outroId } } : { connect: { id: outroId } },
+    },
+  });
+
+  revalidatePath("/", "layout");
+}

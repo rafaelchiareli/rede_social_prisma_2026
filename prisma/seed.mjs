@@ -1,4 +1,4 @@
-// Popula o banco com usuários, perfis, posts com hashtags, curtidas e comentários.
+// Popula o banco com usuários, perfis, posts com hashtags, curtidas, comentários e seguidores.
 // Rode com: npx prisma db seed
 
 import { PrismaClient } from "@prisma/client";
@@ -35,6 +35,14 @@ function criarUsuario(nome, bio, posts = []) {
       posts: { create: posts },
     },
     include: { posts: true },
+  });
+}
+
+// Faz "quem" seguir cada usuário da lista
+function seguir(quem, lista) {
+  return prisma.usuario.update({
+    where: { id: quem.id },
+    data: { seguindo: { connect: lista.map((u) => ({ id: u.id })) } },
   });
 }
 
@@ -78,7 +86,13 @@ async function main() {
     ],
   });
 
-  console.log("Banco populado com usuários, perfis, posts, hashtags, curtidas e comentários!");
+  // Quem segue quem (connect na relação com a própria tabela)
+  await seguir(ana, [bruno, carla]);
+  await seguir(bruno, [ana]);
+  await seguir(carla, [ana, bruno]);
+  await seguir(davi, [ana]);
+
+  console.log("Banco populado com usuários, perfis, posts, hashtags, curtidas, comentários e seguidores!");
 }
 
 main()

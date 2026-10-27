@@ -1,5 +1,5 @@
 // Turmagram: a rede social da turma
-// Aula 3: hashtags (N para N) e perfil (1 para 1)
+// Aula 4: seguidores (relação com a própria tabela)
 
 generator client {
   provider = "prisma-client-js"
@@ -20,6 +20,10 @@ model Usuario {
   posts       Post[]
   curtidas    Curtida[]
   comentarios Comentario[]
+
+  // Usuário segue usuário: os dois lados apontam para a própria tabela Usuario
+  seguindo   Usuario[] @relation("Segue")
+  seguidores Usuario[] @relation("Segue")
 }
 
 // Cada usuário tem no máximo UM perfil (relação 1 para 1)
