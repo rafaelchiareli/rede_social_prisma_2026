@@ -1,14 +1,15 @@
 import { prisma } from "@/lib/prisma";
 import { usuarioAtual } from "@/lib/usuarioAtual";
+import { dadosDoPost } from "@/lib/consultas";
 import NovoPostForm from "@/components/NovoPostForm";
 import PostCard from "@/components/PostCard";
 
 export default async function Feed() {
   const eu = await usuarioAtual();
 
-  // Todos os posts, do mais novo para o mais antigo, com o autor junto
+  // Todos os posts, com autor, contadores e a minha curtida
   const posts = await prisma.post.findMany({
-    include: { autor: true },
+    include: dadosDoPost(eu),
     orderBy: { criadoEm: "desc" },
   });
 
@@ -23,7 +24,7 @@ export default async function Feed() {
       {posts.length === 0 && <p className="vazio">Nenhum post ainda. Seja o primeiro!</p>}
 
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post.id} post={post} eu={eu} />
       ))}
     </main>
   );

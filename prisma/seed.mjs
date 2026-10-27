@@ -1,4 +1,4 @@
-// Popula o banco com usuários e posts de exemplo.
+// Popula o banco com usuários, posts, curtidas e comentários de exemplo.
 // Rode com: npx prisma db seed
 
 import { PrismaClient } from "@prisma/client";
@@ -8,51 +8,54 @@ const prisma = new PrismaClient();
 const avatar = (nome) => `https://api.dicebear.com/9.x/thumbs/svg?seed=${nome}`;
 const foto = (n) => `https://picsum.photos/seed/turmagram${n}/600/600`;
 
+// Cria um usuário já com os posts dele (create aninhado)
+function criarUsuario(nome, posts = []) {
+  return prisma.usuario.create({
+    data: { nome, avatar: avatar(nome), posts: { create: posts } },
+    include: { posts: true },
+  });
+}
+
 async function main() {
-  // Limpa o banco antes (primeiro os posts, depois os usuários)
-  await prisma.post.deleteMany();
+  // Apagar os usuários apaga junto os posts, curtidas e comentários (cascata)
   await prisma.usuario.deleteMany();
 
-  // Cada usuário já é criado com os posts dele (create aninhado)
-  await prisma.usuario.create({
-    data: {
-      nome: "ana",
-      avatar: avatar("ana"),
-      posts: {
-        create: [
-          { legenda: "Primeiro post no Turmagram!", imagem: foto(1) },
-          { legenda: "Fim de semana na praia", imagem: foto(2) },
-        ],
-      },
-    },
+  const ana = await criarUsuario("ana", [
+    { legenda: "Primeiro post no Turmagram!", imagem: foto(1) },
+    { legenda: "Fim de semana na praia", imagem: foto(2) },
+  ]);
+  const bruno = await criarUsuario("bruno", [
+    { legenda: "Treino de hoje concluído", imagem: foto(3) },
+    { legenda: "Alguém joga hoje à noite?", imagem: foto(4) },
+  ]);
+  const carla = await criarUsuario("carla", [
+    { legenda: "Meu desenho novo", imagem: foto(5) },
+  ]);
+  const davi = await criarUsuario("davi");
+
+  // Curtidas: quem curtiu qual post
+  await prisma.curtida.createMany({
+    data: [
+      { usuarioId: bruno.id, postId: ana.posts[0].id },
+      { usuarioId: carla.id, postId: ana.posts[0].id },
+      { usuarioId: davi.id, postId: ana.posts[0].id },
+      { usuarioId: ana.id, postId: bruno.posts[1].id },
+      { usuarioId: ana.id, postId: carla.posts[0].id },
+      { usuarioId: bruno.id, postId: carla.posts[0].id },
+    ],
   });
 
-  await prisma.usuario.create({
-    data: {
-      nome: "bruno",
-      avatar: avatar("bruno"),
-      posts: {
-        create: [
-          { legenda: "Treino de hoje concluído", imagem: foto(3) },
-          { legenda: "Alguém joga hoje à noite?", imagem: foto(4) },
-        ],
-      },
-    },
+  // Comentários
+  await prisma.comentario.createMany({
+    data: [
+      { texto: "Bem-vinda!", autorId: bruno.id, postId: ana.posts[0].id },
+      { texto: "Que lugar lindo", autorId: carla.id, postId: ana.posts[1].id },
+      { texto: "Eu jogo! Que horas?", autorId: davi.id, postId: bruno.posts[1].id },
+      { texto: "Ficou incrível!", autorId: ana.id, postId: carla.posts[0].id },
+    ],
   });
 
-  await prisma.usuario.create({
-    data: {
-      nome: "carla",
-      avatar: avatar("carla"),
-      posts: { create: [{ legenda: "Meu desenho novo", imagem: foto(5) }] },
-    },
-  });
-
-  await prisma.usuario.create({
-    data: { nome: "davi", avatar: avatar("davi") },
-  });
-
-  console.log("Banco populado com 4 usuários e 5 posts!");
+  console.log("Banco populado com usuários, posts, curtidas e comentários!");
 }
 
 main()

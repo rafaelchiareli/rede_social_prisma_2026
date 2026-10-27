@@ -8,13 +8,23 @@ export default async function PaginaUsuario({ params }) {
   const idNumero = Number(id);
   if (!Number.isInteger(idNumero)) notFound();
 
-  // Um usuário com os posts dele (o outro lado da relação)
   const usuario = await prisma.usuario.findUnique({
     where: { id: idNumero },
-    include: { posts: { orderBy: { criadoEm: "desc" } } },
+    include: {
+      posts: {
+        orderBy: { criadoEm: "desc" },
+        // Cada post já vem com os seus contadores
+        include: { _count: { select: { curtidas: true, comentarios: true } } },
+      },
+    },
   });
 
   if (!usuario) notFound();
+
+  // Filtro por relação: curtidas em posts cujo autor é este usuário
+  const curtidasRecebidas = await prisma.curtida.count({
+    where: { post: { autorId: usuario.id } },
+  });
 
   return (
     <main>
@@ -25,6 +35,9 @@ export default async function PaginaUsuario({ params }) {
           <p className="numeros">
             <span>
               <strong>{usuario.posts.length}</strong> posts
+            </span>
+            <span>
+              <strong>{curtidasRecebidas}</strong> curtidas recebidas
             </span>
           </p>
         </div>

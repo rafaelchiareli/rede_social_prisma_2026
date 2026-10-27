@@ -54,3 +54,59 @@ export async function criarPost(formData) {
 
   revalidatePath("/", "layout");
 }
+
+// ---------- CURTIDAS E COMENTÁRIOS ----------
+
+// Curte o post. Se já tinha curtido, descurte.
+export async function curtir(formData) {
+  const eu = await usuarioAtual();
+  if (!eu) redirect("/entrar");
+
+  const postId = Number(formData.get("postId"));
+
+  // Com @@id([usuarioId, postId]), a chave tem as duas colunas juntas
+  const chave = { usuarioId_postId: { usuarioId: eu.id, postId } };
+  const jaCurtiu = await prisma.curtida.findUnique({ where: chave });
+
+  if (jaCurtiu) {
+    await prisma.curtida.delete({ where: chave });
+  } else {
+    await prisma.curtida.create({ data: { usuarioId: eu.id, postId } });
+  }
+
+  revalidatePath("/", "layout");
+}
+
+// Comenta em um post
+export async function comentar(formData) {
+  const eu = await usuarioAtual();
+  if (!eu) redirect("/entrar");
+
+  const postId = Number(formData.get("postId"));
+  const texto = formData.get("texto").trim();
+  if (texto === "") return;
+
+  await prisma.comentario.create({
+    data: {
+      texto,
+      autor: { connect: { id: eu.id } },
+      post: { connect: { id: postId } },
+    },
+  });
+
+  revalidatePath("/", "layout");
+}
+
+// Apaga um post. As curtidas e comentários dele somem junto (cascata).
+export async function apagarPost(formData) {
+  const eu = await usuarioAtual();
+  if (!eu) redirect("/entrar");
+
+  const id = Number(formData.get("postId"));
+
+  // Só apaga se o post for MEU: o where tem o id E o autor
+  await prisma.post.deleteMany({ where: { id, autorId: eu.id } });
+
+  revalidatePath("/", "layout");
+  redirect("/");
+}
