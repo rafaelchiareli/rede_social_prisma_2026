@@ -2,7 +2,16 @@
 
 Uma mini rede social feita com **Next.js** e **Prisma** em 4 aulas. A turma cria usuários, publica fotos, curte, comenta, usa hashtags e segue os colegas, e em cada aula aprende recursos novos do Prisma.
 
-## Como rodar
+## Ponto de partida (branch `main`)
+
+A `main` é o projeto **limpo**, para os alunos construírem durante as aulas. Ela já vem com:
+
+- `prisma/schema.prisma` e `prisma/seed.mjs` da Aula 1 (tabelas `Usuario` e `Post` e os dados de exemplo)
+- `lib/prisma.js` (a conexão com o banco)
+- `app/globals.css` com o visual das 4 aulas
+- `package.json`, `next.config.mjs` e `eslint.config.mjs` já ajustados
+
+Todo o resto (ações, componentes e páginas) é escrito em aula, seguindo o guia.
 
 Precisa do Node.js 20 ou mais novo.
 
@@ -13,7 +22,7 @@ npx prisma db seed
 npm run dev
 ```
 
-Abra http://localhost:3000 e escolha um usuário no topo da página, em **Entrar como...**
+Abra http://localhost:3000. Deve aparecer a mensagem *Tudo pronto para começar!*
 
 - `migrate dev` cria o banco (`prisma/dev.db`) com as tabelas do `schema.prisma`.
 - `db seed` coloca usuários e posts de exemplo no banco. Pode rodar de novo sempre que quiser começar do zero.
@@ -23,7 +32,7 @@ Abra http://localhost:3000 e escolha um usuário no topo da página, em **Entrar
 
 ## As 4 aulas
 
-Cada aula tem uma **branch** no Git com o projeto pronto até aquele ponto. A `main` tem o projeto completo.
+Cada aula tem uma **branch** no Git com o projeto **pronto** até o fim daquela aula. Use como gabarito.
 
 | Aula | Branch | O que a rede social ganha | Recursos do Prisma |
 |---|---|---|---|
@@ -40,7 +49,7 @@ npx prisma migrate dev --name aula2
 npx prisma db seed
 ```
 
-Para voltar para a versão completa: `git checkout main`.
+Para voltar ao ponto de partida: `git checkout main`. O projeto completo, com as 4 aulas, está na branch `aula-4`.
 
 ## Onde fica cada coisa
 

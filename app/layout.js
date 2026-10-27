@@ -1,5 +1,4 @@
 import "./globals.css";
-import Topo from "@/components/Topo";
 
 export const metadata = {
   title: "Turmagram",
@@ -10,7 +9,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
       <body>
-        <Topo />
         <div className="conteudo">{children}</div>
       </body>
     </html>
