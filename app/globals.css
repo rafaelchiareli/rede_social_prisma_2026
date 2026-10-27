@@ -1,49 +1,197 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Turmagram — estilos de todas as aulas (não precisa mexer aqui) */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+* { box-sizing: border-box; }
 
 body {
-  min-height: 100%;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #fafafa;
+  color: #262626;
+}
+
+a { color: inherit; text-decoration: none; }
+
+h1 { font-size: 24px; }
+h2 { font-size: 18px; }
+
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #0095f6;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover { background: #1877f2; }
+
+input, textarea, select {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  background: white;
+}
+
+.conteudo { max-width: 620px; margin: 0 auto; padding: 16px; }
+
+.avatar { border-radius: 50%; background: #eee; vertical-align: middle; }
+
+.aviso { background: #fff7d6; padding: 12px; border-radius: 8px; }
+.vazio { color: #8e8e8e; text-align: center; padding: 20px; }
+.erro { color: #ed4956; }
+
+/* ---------- Topo ---------- */
+.topo {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: white;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.logo { font-size: 24px; font-weight: bold; font-style: italic; }
+
+.menu { display: flex; gap: 14px; flex: 1; }
+.menu a:hover { text-decoration: underline; }
+
+.entrar-como { display: flex; gap: 6px; }
+
+/* ---------- Formulários ---------- */
+.caixa, .novo-post {
   display: flex;
   flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  gap: 8px;
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 20px;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+.caixa h2 { margin: 0; }
+.novo-post textarea { min-height: 70px; resize: vertical; }
+.novo-post button, .caixa button { align-self: flex-end; }
+
+/* ---------- Post ---------- */
+.post {
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.post-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+.autor { display: inline-flex; align-items: center; gap: 8px; }
+.data { color: #8e8e8e; font-size: 13px; }
+
+.post-imagem { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: #eee; }
+
+.legenda { padding: 0 12px 12px; margin: 8px 0 0; line-height: 1.4; }
+
+.acoes { display: flex; align-items: center; gap: 12px; padding: 8px 12px 0; }
+
+.botao-curtir {
+  background: none;
+  color: #262626;
+  font-size: 18px;
+  padding: 4px 0;
 }
+.botao-curtir:hover { background: none; }
+.botao-curtir.curtido { color: #ed4956; }
+
+.link-comentarios { color: #8e8e8e; font-size: 14px; }
+
+.botao-apagar { background: none; color: #ed4956; font-size: 13px; padding: 4px; margin-left: auto; }
+.botao-apagar:hover { background: #fdecee; }
+
+.hashtag { color: #00376b; }
+.hashtag:hover { text-decoration: underline; }
+
+/* ---------- Comentários ---------- */
+.comentarios { background: white; border: 1px solid #dbdbdb; border-radius: 10px; padding: 12px; }
+.comentarios h2 { margin-top: 0; }
+.comentario { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+.comentario p { margin: 4px 0 0; }
+.form-comentario { display: flex; gap: 8px; margin-top: 12px; }
+.form-comentario input { flex: 1; }
+
+/* ---------- Perfil ---------- */
+.perfil { display: flex; align-items: center; gap: 24px; margin-bottom: 20px; flex-wrap: wrap; }
+.perfil h1 { margin: 0 0 8px; }
+.numeros { display: flex; gap: 16px; margin: 0 0 8px; }
+.bio { white-space: pre-line; margin: 0 0 8px; }
+.form-bio { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+.form-bio textarea { min-height: 60px; }
+.form-bio button { align-self: flex-start; }
+
+.botao-seguir.seguindo { background: #efefef; color: #262626; }
+
+/* ---------- Grade de posts ---------- */
+.grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.grade-item { position: relative; display: block; aspect-ratio: 1; background: #eee; }
+.grade-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.grade-info {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.45);
+  color: white;
+  font-weight: bold;
+  opacity: 0;
+}
+.grade-item:hover .grade-info { opacity: 1; }
+
+/* ---------- Listas ---------- */
+.lista-usuarios, .lista-tags, .ranking { list-style: none; padding: 0; }
+.lista-usuarios li, .lista-tags li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.ranking { counter-reset: posicao; }
+.ranking li {
+  counter-increment: posicao;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+}
+.ranking li::before { content: counter(posicao) "º"; font-weight: bold; width: 28px; }
+.ranking li img.miniatura { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; }
+.ranking li .valor { margin-left: auto; font-weight: bold; }
+
+/* ---------- Abas e sugestões ---------- */
+.abas { display: flex; gap: 8px; margin-bottom: 16px; }
+.abas a { padding: 6px 14px; border-radius: 20px; background: #efefef; }
+.abas a.ativa { background: #262626; color: white; }
+
+.sugestoes { background: white; border: 1px solid #dbdbdb; border-radius: 10px; padding: 12px; margin-bottom: 20px; }
+.sugestoes h2 { margin: 0 0 10px; font-size: 15px; color: #8e8e8e; }
+.sugestao { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }

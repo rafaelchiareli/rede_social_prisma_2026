@@ -6,15 +6,21 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.3",
     "next": "16.4.3",
+    "prisma": "^6.19.3",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
   "devDependencies": {
     "eslint": "^9",
     "eslint-config-next": "16.4.3"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.mjs"
   }
 }
