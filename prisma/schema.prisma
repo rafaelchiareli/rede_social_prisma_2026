@@ -1,5 +1,5 @@
 // Turmagram: a rede social da turma
-// Aula 1: usuários e posts (relação 1 para N)
+// As tabelas (models) vão ser criadas durante as aulas, aqui embaixo.
 
 generator client {
   provider = "prisma-client-js"
@@ -8,23 +8,4 @@ generator client {
 datasource db {
   provider = "sqlite"
   url      = "file:./dev.db"
-}
-
-model Usuario {
-  id       Int      @id @default(autoincrement())
-  nome     String   @unique
-  avatar   String
-  criadoEm DateTime @default(now())
-
-  posts Post[]
-}
-
-model Post {
-  id       Int      @id @default(autoincrement())
-  imagem   String
-  legenda  String
-  criadoEm DateTime @default(now())
-
-  autorId Int
-  autor   Usuario @relation(fields: [autorId], references: [id])
 }

@@ -6,7 +6,8 @@ Uma mini rede social feita com **Next.js** e **Prisma** em 4 aulas. A turma cria
 
 A `main` é o projeto **limpo**, para os alunos construírem durante as aulas. Ela já vem com:
 
-- `prisma/schema.prisma` e `prisma/seed.mjs` da Aula 1 (tabelas `Usuario` e `Post` e os dados de exemplo)
+- `prisma/schema.prisma` só com a configuração do banco: as tabelas (`model`) são criadas em aula
+- `prisma/seed.mjs` com os dados de exemplo da Aula 1 (só funciona depois de criar as tabelas `Usuario` e `Post`)
 - `lib/prisma.js` (a conexão com o banco)
 - `app/globals.css` com o visual das 4 aulas
 - `package.json`, `next.config.mjs` e `eslint.config.mjs` já ajustados
@@ -17,12 +18,17 @@ Precisa do Node.js 20 ou mais novo.
 
 ```bash
 npm install
-npx prisma migrate dev --name inicio
-npx prisma db seed
 npm run dev
 ```
 
 Abra http://localhost:3000. Deve aparecer a mensagem *Tudo pronto para começar!*
+
+Depois de criar as tabelas `Usuario` e `Post` no `schema.prisma` (Aula 1), crie o banco e coloque os dados de exemplo:
+
+```bash
+npx prisma migrate dev --name inicio
+npx prisma db seed
+```
 
 - `migrate dev` cria o banco (`prisma/dev.db`) com as tabelas do `schema.prisma`.
 - `db seed` coloca usuários e posts de exemplo no banco. Pode rodar de novo sempre que quiser começar do zero.
