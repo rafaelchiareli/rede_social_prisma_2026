@@ -25,7 +25,7 @@ export default function PostCard({ post, eu }) {
       <div className="acoes">
         <BotaoCurtir post={post} curtido={curtido} />
         <Link href={`/post/${post.id}`} className="link-comentarios">
-          💬 {post._count.comentarios} comentários
+          ✎ {post._count.comentarios} comentários
         </Link>
         {souAutor && <BotaoApagar post={post} />}
       </div>

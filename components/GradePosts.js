@@ -10,7 +10,7 @@ export default function GradePosts({ posts }) {
           <img src={post.imagem} alt={post.legenda} />
           <span className="grade-info">
             <span>♥ {post._count.curtidas}</span>
-            <span>💬 {post._count.comentarios}</span>
+            <span>✎ {post._count.comentarios}</span>
           </span>
         </Link>
       ))}
