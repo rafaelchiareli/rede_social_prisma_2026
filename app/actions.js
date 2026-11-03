@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import {prisma} from '../lib/prisma'
-import { usuiarioAtual } from "../lib/usuarioAtual";o
+import { usuarioAtual } from "../lib/usuarioAtual";
 import { avatarPara, imagemAleatoria } from "../lib/imagens";
 
 //criar um usuario
@@ -15,7 +15,7 @@ export async function criarUsuario(formData){
     });
     if (existe) redirect("/entrar?erro=nome");
     const usuario= await prisma.usuario.create({
-        data: nome, avatar: avatarPara(nome)
+        data: {nome, avatar: avatarPara(nome)},
     });
 
     const cookieStore = await cookies();
@@ -32,7 +32,7 @@ export async function entrarComo(formData){
 }
 //cria um post para o usuario atual
 export async function criarPost(formData){
-    const eu = await usuiarioAtual();
+    const eu = await usuarioAtual();
     if (!eu) redirect("/entrar");
     const legenda = formData.get("legenda").trim();
     const imagem = formData.get("imagem").trim() || imagemAleatoria();

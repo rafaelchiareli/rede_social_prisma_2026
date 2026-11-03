@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { prisma } from '../../lib/prisma'
-import { usuiarioAtual } from "../lib/usuarioAtual";
+
 import { entrarComo } from "../actions";
 import Avatar from "./avatar";
+import { usuarioAtual } from "@/lib/usuarioAtual";
 
 export default async function Topo() {
-    const eu = await usuiarioAtual();
+    const eu = await usuarioAtual
     const usuarios = await prisma.usuario.findMany({
         orderBy: {
             nome: "asc"
