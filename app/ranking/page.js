@@ -48,7 +48,7 @@ export default async function Ranking() {
               <img src={post.imagem} alt={post.legenda} className="miniatura" />
             </Link>
             <span>{post.autor.nome}</span>
-            <span className="valor">💬 {post._count.comentarios}</span>
+            <span className="valor">✎ {post._count.comentarios}</span>
           </li>
         ))}
       </ol>
