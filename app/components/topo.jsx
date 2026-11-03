@@ -6,7 +6,7 @@ import Avatar from "./avatar";
 import { usuarioAtual } from "@/lib/usuarioAtual";
 
 export default async function Topo() {
-    const eu = await usuarioAtual
+    const eu = await usuarioAtual();
     const usuarios = await prisma.usuario.findMany({
         orderBy: {
             nome: "asc"
