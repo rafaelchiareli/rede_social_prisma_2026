@@ -24,7 +24,12 @@ export default function Comentarios({ post, eu }) {
       {eu ? (
         <form action={comentar} className="form-comentario">
           <input type="hidden" name="postId" value={post.id} />
-          <input name="texto" placeholder="Escreva um comentário..." required maxLength={200} />
+          <input
+            name="texto"
+            placeholder="Escreva um comentário..."
+            required
+            maxLength={200}
+          />
           <button type="submit">Enviar</button>
         </form>
       ) : (
