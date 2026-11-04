@@ -1,6 +1,7 @@
 
 import { prisma } from '../lib/prisma';
 import { usuarioAtual } from '../lib/usuarioAtual';
+import { dadosDoPost } from '@/lib/consultas';
 import NovoPostForm from './components/novoPostForm';
 import PostCard from './components/postCard';
 export default async function Feed() {
@@ -19,7 +20,7 @@ export default async function Feed() {
 
       {posts.length === 0 && <p className='vazio'>Nenhum post ainda, seja o primeiro a postar!</p>}
       {posts.map((p) => (
-        <PostCard key={p.id} post={p} />
+        <PostCard key={p.id} post={p} eu={eu}/>
       ))}
     </main>
   )
