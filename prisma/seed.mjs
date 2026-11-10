@@ -1,4 +1,4 @@
-// Popula o banco com usuários, perfis, posts com hashtags, curtidas, comentários e seguidores.
+// Popula o banco com usuários, perfis, posts, hashtags, curtidas, comentários e seguidores.
 // Rode com: npx prisma db seed
 
 import { PrismaClient } from "@prisma/client";
@@ -10,7 +10,8 @@ const foto = (n) => `https://picsum.photos/seed/turmagram${n}/600/600`;
 
 // Acha as #hashtags da legenda (igual ao lib/hashtags.js)
 function hashtags(texto) {
-  const nomes = (texto.match(/#[\p{L}\p{N}_]+/gu) ?? []).map((h) => h.slice(1).toLowerCase());
+  const encontradas = texto.match(/#[\p{L}\p{N}_]+/gu) ?? [];
+  const nomes = encontradas.map((h) => h.slice(1).toLowerCase());
   return [...new Set(nomes)];
 }
 
@@ -20,7 +21,10 @@ function post(legenda, n) {
     legenda,
     imagem: foto(n),
     tags: {
-      connectOrCreate: hashtags(legenda).map((nome) => ({ where: { nome }, create: { nome } })),
+      connectOrCreate: hashtags(legenda).map((nome) => ({
+        where: { nome },
+        create: { nome },
+      })),
     },
   };
 }
@@ -92,7 +96,7 @@ async function main() {
   await seguir(carla, [ana, bruno]);
   await seguir(davi, [ana]);
 
-  console.log("Banco populado com usuários, perfis, posts, hashtags, curtidas, comentários e seguidores!");
+  console.log("Banco populado com os dados de exemplo!");
 }
 
 main()

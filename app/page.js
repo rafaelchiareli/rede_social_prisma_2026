@@ -45,7 +45,9 @@ export default async function Feed({ searchParams }) {
 
       {posts.length === 0 && (
         <p className="vazio">
-          {aba === "seguindo" ? "Siga alguém para ver os posts aqui." : "Nenhum post ainda."}
+          {aba === "seguindo"
+            ? "Siga alguém para ver os posts aqui."
+            : "Nenhum post ainda."}
         </p>
       )}
 
