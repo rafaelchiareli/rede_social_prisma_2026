@@ -55,11 +55,11 @@ async function main() {
   await prisma.usuario.deleteMany();
   await prisma.tag.deleteMany();
 
-  const ana = await criarUsuario("ana", "Fotografia e praia 📷", [
+  const ana = await criarUsuario("ana", "Fotografia e praia", [
     post("Primeiro post no Turmagram! #turma", 1),
     post("Fim de semana na praia #praia #ferias", 2),
   ]);
-  const bruno = await criarUsuario("bruno", "Futebol todo dia ⚽", [
+  const bruno = await criarUsuario("bruno", "Futebol todo dia", [
     post("Treino de hoje concluído #futebol", 3),
     post("Alguém joga hoje à noite? #games #turma", 4),
   ]);
