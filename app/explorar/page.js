@@ -15,7 +15,9 @@ export default async function Explorar() {
       <h1>Hashtags em alta</h1>
 
       {tags.length === 0 && (
-        <p className="vazio">Nenhuma hashtag ainda. Use #algumacoisa na legenda de um post!</p>
+        <p className="vazio">
+          Nenhuma hashtag ainda. Use #algumacoisa na legenda de um post!
+        </p>
       )}
 
       <ul className="lista-tags">
