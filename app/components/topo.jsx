@@ -19,7 +19,9 @@ export default async function Topo() {
             </Link>
             <nav className="menu">
                 <Link href="/">Feed</Link>
+                <Link href="/explorar">Explorar</Link>
                 <Link href="/entrar">Usuarios</Link>
+
             </nav>
             <form action={entrarComo} className="entrar-como">
                 <select name="usuarioId" defaultValue={eu?.id ?? ""} required >

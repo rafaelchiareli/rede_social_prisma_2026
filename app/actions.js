@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from '../lib/prisma'
 import { usuarioAtual } from "../lib/usuarioAtual";
 import { avatarPara, imagemAleatoria } from "../lib/imagens";
+import { extrairHashtags } from "../lib/hashtags";
 
 //criar um usuario
 export async function criarUsuario(formData) {
@@ -34,13 +35,21 @@ export async function entrarComo(formData) {
 export async function criarPost(formData) {
     const eu = await usuarioAtual();
     if (!eu) redirect("/entrar");
+
     const legenda = formData.get("legenda").trim();
     const imagem = formData.get("imagem").trim() || imagemAleatoria();
+    const tags= extrairHashtags(legenda);
     await prisma.post.create({
         data: {
             legenda,
             imagem,
-            autor: { connect: { id: eu.id } }
+            autor: { connect: { id: eu.id } },
+            tags: {
+                connectOrCreate: tags.map((nome) => ({
+                    where: {nome},
+                    create: {nome}
+                }))
+            }
         }
     });
     revalidatePath("/", "layout");
@@ -98,4 +107,17 @@ export async function apagarPost(formData){
     redirect("/");
 }
 
+//Salva a bio do usuario atual: cria o perfil ou atualiza o que ja existe
+export async function salvarBio(formData){
+    const eu = await usuarioAtual();
+    if (!eu) redirect("/entrar");
+
+    const bio = formData.get("bio").trim();
+
+    await prisma.perfil.upsert({
+        where: {usuarioId: eu.id},
+        update: {bio},
+        create: {bio, usuario : { connect : {id: eu.id }}}
+    });
+}
 

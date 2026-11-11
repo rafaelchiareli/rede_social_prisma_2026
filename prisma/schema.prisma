@@ -16,10 +16,21 @@ model Usuario {
   nome String @unique
   avatar String
   criadoEm DateTime @default(now())
+  perfil Perfil?
   posts Post[]
   curtidas  Curtida[]
   comentarios Comentario[]
 }
+
+model Perfil {
+  id Int @id @default (autoincrement())
+  bio String
+
+  usuarioId Int @unique
+  usuario Usuario @relation (fields :[usuarioId], references: [id], onDelete: Cascade)
+}
+
+
 
 model Post {
   id Int @id @default(autoincrement())
@@ -28,10 +39,18 @@ model Post {
   criadoEm DateTime @default(now())
 
   autorId Int
-  autor Usuario @relation(fields: [autorId], references: [id])
+  autor Usuario @relation(fields: [autorId], references: [id], onDelete: Cascade)
 
   curtidas Curtida[]
-  comentatios Comentario[]
+  comentarios Comentario[]
+  tags Tag[]
+}
+
+model Tag {
+  id Int @id @default(autoincrement())
+  nome String @unique
+
+  posts Post[]
 }
 
 model Curtida {

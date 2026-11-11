@@ -1,5 +1,5 @@
 import Link from "next/link";   
-import { Component } from "react";  
+
 import Avatar from "./avatar";
 
 export default function Comentarios ({post, eu}){

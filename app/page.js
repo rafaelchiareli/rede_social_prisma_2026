@@ -8,7 +8,7 @@ export default async function Feed() {
   const eu = await usuarioAtual();
   //todos os posts do mais novo para o mais antigo
   const posts = await prisma.post.findMany({
-    include: { autor: true },
+    include: dadosDoPost(eu),
     orderBy: { criadoEm: "desc" }
   });
   return (

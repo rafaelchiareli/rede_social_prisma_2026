@@ -2,6 +2,7 @@ import Link from "next/link";
 import Avatar from "./avatar";
 import BotaoCurtir from "./botaoCurtir";
 import BotaoApagar from "./botaoApagar";
+import Legenda from "./legenda";
 
 export default function PostCard({ post, eu }) {
     const curtido = post.curtidas.length > 0;
@@ -23,12 +24,12 @@ export default function PostCard({ post, eu }) {
             <div className="acoes">
                 <BotaoCurtir post={post} curtido={curtido} />
                 <Link href={`/post/${post.id}`} className='link-comentarios'>
-                    {post._count.comenarios} comentarios
+                    {post._count.comentarios} comentarios
                 </Link>
                 {souAutor && <BotaoApagar post={post} />}
             </div>
             <p className="legenda">
-                <strong>{post.autor.nome}</strong> {post.legenda}
+                <strong>{post.autor.nome}</strong><Legenda texto={post.legenda} />
             </p>
         </article>
     )

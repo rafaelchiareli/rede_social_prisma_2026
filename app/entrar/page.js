@@ -6,7 +6,7 @@ import Avatar  from '../components/avatar'
 export default async function Entrar({searchParams}){
     const {erro } = await searchParams;
     const usuarios = await prisma.usuario.findMany({
-        include: {posts: true},
+        include: {_count : {select : {posts: true}}},
         orderBy: {criadoEm: "desc"} 
     });
     return (
@@ -25,7 +25,7 @@ export default async function Entrar({searchParams}){
                             <Avatar usuario={u} />
                             <strong>{u.nome}</strong>
                         </Link>
-                        <span>{u.posts.length} posts</span>
+                        <span>{u._count.posts} posts</span>
                     </li>
                 ))}
             </ul>
